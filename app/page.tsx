@@ -1,103 +1,181 @@
 import Image from "next/image";
+import Link from "next/link";
+import { PRODUCTS } from "@/constants/products";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const featuredProducts = PRODUCTS.filter((p) =>
+    p.categories.includes("featured")
+  );
+  const trendingProducts = PRODUCTS.slice(0, 4); // First 4 as trending
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <main className="bg-gray-50">
+      {/* Hero Section */}
+      <section className="relative h-[calc(100vh-200px)] min-h-[500px] max-h-[800px] w-full">
+        <div className="absolute inset-0 z-0 w-full">
+          <Image
+            src="/images/hero-main.webp"
+            alt="Featured Shoes"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/40 to-gray-900/80" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <div className="container mx-auto px-4 h-full flex items-center justify-center">
+          <div className="relative z-10 max-w-4xl text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-xl">
+              Step Into Style
+            </h1>
+            <p className="text-lg md:text-xl mb-8 text-gray-200 drop-shadow-md">
+              New Arrivals Up to 40% Off
+            </p>
+            <Link href={`/products`}>
+              <Button size="lg" variant={`secondary`}>
+                Shop Collection
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold mb-8">Featured Collection</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProducts.map((product) => (
+            <article
+              key={product.id}
+              className="group relative bg-white rounded-xl p-4 hover:shadow-lg transition-shadow"
+            >
+              <Link href={`/products/${product.slug}`}>
+                <div className="relative h-64 mb-4">
+                  <Image
+                    src={product.mainImage}
+                    alt={product.title}
+                    fill
+                    className="object-cover rounded-md group-hover:opacity-0 transition-opacity"
+                  />
+                  {product.hoverImage && (
+                    <Image
+                      src={product.hoverImage}
+                      alt={product.title}
+                      fill
+                      className="object-cover rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
+                  )}
+                </div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-500">
+                      {product.brand}
+                    </h3>
+                    <h2 className="text-xl font-bold mb-2">{product.title}</h2>
+                  </div>
+                  <span className="text-lg font-bold">
+                    ${product.defaultProductVariant.price}
+                  </span>
+                </div>
+                <div className="flex gap-2 mt-2">
+                  {product.colors.map((color) => (
+                    <div
+                      key={color}
+                      className="w-6 h-6 rounded-full border-2 border-gray-200"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+                {product.rating && (
+                  <div className="mt-4 flex items-center">
+                    <span className="text-yellow-400">★</span>
+                    <span className="ml-1">{product.rating}</span>
+                    <span className="text-gray-500 text-sm ml-2">
+                      ({product.reviewsCount} reviews)
+                    </span>
+                  </div>
+                )}
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Trending Products Grid */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold mb-8">Trending Now</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {trendingProducts.map((product) => (
+            <article
+              key={product.id}
+              className="group relative bg-white rounded-xl p-4 hover:shadow-lg transition-shadow"
+            >
+              <Link href={`/products/${product.slug}`}>
+                <div className="relative h-64 mb-4">
+                  <Image
+                    src={product.mainImage}
+                    alt={product.title}
+                    fill
+                    className="object-cover rounded-md group-hover:opacity-0 transition-opacity"
+                  />
+                  {product.hoverImage && (
+                    <Image
+                      src={product.hoverImage}
+                      alt={product.title}
+                      fill
+                      className="object-contain opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
+                  )}
+                </div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-500">
+                      {product.brand}
+                    </h3>
+                    <h2 className="text-xl font-bold mb-2">{product.title}</h2>
+                  </div>
+                  <span className="text-lg font-bold">
+                    ${product.defaultProductVariant.price}
+                  </span>
+                </div>
+                <div className="flex gap-2 mt-2">
+                  {product.colors.map((color) => (
+                    <div
+                      key={color}
+                      className="w-6 h-6 rounded-full border-2 border-gray-200"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Categories */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-8">Shop by Category</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {["Running", "Sneakers", "Boots", "Sandals"].map((category) => (
+              <Link
+                key={category}
+                href={`/categories/${category.toLowerCase()}`}
+                className="relative h-48 rounded-xl overflow-hidden hover:shadow-xl transition-all bg-gray-100"
+              >
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    {category}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
